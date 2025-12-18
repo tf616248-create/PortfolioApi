@@ -1,40 +1,108 @@
-//// çåáä ìäåñéó:
-//using GitHubService;
-//using Scrutor;
-//using PortfolioApi.Decorators;
-//using GitHubService;
+// //// Ã§Ã¥Ã¡Ã¤ Ã¬Ã¤Ã¥Ã±Ã©Ã³:
+// //using GitHubService;
+// //using Scrutor;
+// //using PortfolioApi.Decorators;
+// //using GitHubService;
 
-//var builder = WebApplication.CreateBuilder(args);
+// //var builder = WebApplication.CreateBuilder(args);
 
-//// Add services to the container.
-///
+// //// Add services to the container.
+// ///
 
 
 
-//builder.Services.AddControllers();
-//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-//// øéùåí ùéøåúé æéëøåï òáåø Caching
-//builder.Services.AddMemoryCache();
-//var app = builder.Build();
-//// øéùåí IGitHubService, åäåñôú äîòèôú (Decorator)
-//builder.Services.AddScoped<IGitHubService, GitHubService.GitHubService>(); // øéùåí äùéøåú äàîéúé
-//builder.Services.Decorate<IGitHubService, CachedGitHubService>();
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+// //builder.Services.AddControllers();
+// //// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// //builder.Services.AddEndpointsApiExplorer();
+// //builder.Services.AddSwaggerGen();
+// //// Ã¸Ã©Ã¹Ã¥Ã­ Ã¹Ã©Ã¸Ã¥ÃºÃ© Ã¦Ã©Ã«Ã¸Ã¥Ã¯ Ã²Ã¡Ã¥Ã¸ Caching
+// //builder.Services.AddMemoryCache();
+// //var app = builder.Build();
+// //// Ã¸Ã©Ã¹Ã¥Ã­ IGitHubService, Ã¥Ã¤Ã¥Ã±Ã´Ãº Ã¤Ã®Ã²Ã¨Ã´Ãº (Decorator)
+// //builder.Services.AddScoped<IGitHubService, GitHubService.GitHubService>(); // Ã¸Ã©Ã¹Ã¥Ã­ Ã¤Ã¹Ã©Ã¸Ã¥Ãº Ã¤Ã Ã®Ã©ÃºÃ©
+// //builder.Services.Decorate<IGitHubService, CachedGitHubService>();
+// //// Configure the HTTP request pipeline.
+// //if (app.Environment.IsDevelopment())
+// //{
+// //    app.UseSwagger();
+// //    app.UseSwaggerUI();
+// //}
 
-//app.UseHttpsRedirection();
+// //app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+// //app.UseAuthorization();
 
-//app.MapControllers();
+// //app.MapControllers();
 
-//app.Run();
+// //app.Run();
+
+
+
+
+// using GitHubService;
+// using GitHubService.Configuration;
+// using PortfolioApi.Decorators;
+// using Scrutor;
+
+// var builder = WebApplication.CreateBuilder(args);
+
+// // --- Ã Ã¥Ã´Ã¶Ã©Ã¥Ãº Ã¥-Configuration ---
+// // 1. Ã¸Ã©Ã¹Ã¥Ã­ Ã¹Ã©Ã¸Ã¥ÃºÃ© Ã¦Ã©Ã«Ã¸Ã¥Ã¯ Ã²Ã¡Ã¥Ã¸ In-Memory Caching.
+// builder.Services.AddMemoryCache();
+
+// // 2. Ã·Ã¸Ã©Ã Ãº Ã¤-Configuration (Ã«Ã¥Ã¬Ã¬ secrets.json) Ã¥Ã¤Ã¦Ã¸Ã·ÃºÃ¤ Ã¬Ã®Ã§Ã¬Ã·Ãº GitHubOptions.
+// builder.Services.Configure<GitHubOptions>(
+//     builder.Configuration.GetSection(GitHubOptions.GitHub));
+
+
+// // --- Ã¸Ã©Ã¹Ã¥Ã­ Ã¤-Service Ã¥Ã¤-Decorator (Ã¡Ã Ã®Ã¶Ã²Ã¥Ãº Scrutor) ---
+// // 3. Ã¸Ã©Ã¹Ã¥Ã­ Ã¤Ã¹Ã©Ã¸Ã¥Ãº Ã¤Ã Ã®Ã©ÃºÃ© (Ã¤Ã¡Ã±Ã©Ã±Ã©) Ã¹Ã®ÃºÃ§Ã¡Ã¸ Ã¬-GitHub.
+// builder.Services.AddScoped<IGitHubService, GitHubService.GitHubService>();
+
+// // 4. Ã¸Ã©Ã¹Ã¥Ã­ Ã¤-Decorator (Ã¤Ã®Ã²Ã¨Ã´Ãº) Ã¹Ã®Ã¨Ã´Ã¬ Ã¡-Caching.
+// // Ã«Ã Ã¹Ã¸ Ã·Ã¥Ã£ Ã©Ã¡Ã·Ã¹ IGitHubService, Ã¤Ã¥Ã  Ã©Ã·Ã¡Ã¬ Ã Ãº CachedGitHubService Ã¹Ã®Ã²Ã¨Ã³ Ã Ãº GitHubService.
+// builder.Services.Decorate<IGitHubService, CachedGitHubService>();
+
+
+// // --- Ã¹Ã©Ã¸Ã¥ÃºÃ© API Ã±Ã¨Ã°Ã£Ã¸Ã¨Ã©Ã©Ã­ ---
+// builder.Services.AddControllers();
+// // Ã¬Ã©Ã®Ã¥Ã£: Ã¤Ã¥Ã±Ã´Ãº Swagger/OpenAPI Ã«Ã£Ã© Ã¬Ã¤Ã·Ã¬ Ã²Ã¬ Ã¤Ã¡Ã£Ã©Ã·Ã¥Ãº
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
+
+
+// // --- Ã¡Ã°Ã©Ã©Ãº Ã¤-App ---
+// var app = builder.Build();
+
+// // Configure the HTTP request pipeline.
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+// app.UseHttpsRedirection();
+
+// app.UseAuthorization();
+
+// app.MapControllers();
+
+// app.Run();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -46,32 +114,37 @@ using Scrutor;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- àåôöéåú å-Configuration ---
-// 1. øéùåí ùéøåúé æéëøåï òáåø In-Memory Caching.
+// --- ××•×¤×¦×™×•×ª ×•-Configuration ---
+// 1. ×¨×™×©×•× ×©×™×¨×•×ª×™ ×–×™×›×¨×•×Ÿ ×¢×‘×•×¨ In-Memory Caching.
 builder.Services.AddMemoryCache();
 
-// 2. ÷øéàú ä-Configuration (ëåìì secrets.json) åäæø÷úä ìîçì÷ú GitHubOptions.
-builder.Services.Configure<GitHubOptions>(
-    builder.Configuration.GetSection(GitHubOptions.GitHub));
+// 2. ×§×¨×™××ª ×”-Configuration ×•×¢×“×›×•×Ÿ ×™×“× ×™ ×××©×ª× ×™ ×¡×‘×™×‘×” ×©×œ GitHub
+builder.Services.Configure<GitHubOptions>(options =>
+{
+    // ×˜×¢×™× ×ª ×‘×¨×™×¨×ª ×”××—×“×œ ××”-appsettings.json ××• secrets.json
+    builder.Configuration.GetSection(GitHubOptions.GitHub).Bind(options);
 
+    // ×‘×“×™×§×” ×•×“×¨×™×¡×” ×©×œ ×”×¢×¨×›×™× ×‘××™×“×” ×•×§×™×™××™× ××©×ª× ×™ ×¡×‘×™×‘×” (×¢×‘×•×¨ GitHub Actions)
+    var envUsername = builder.Configuration["GH_USERNAME"];
+    var envToken = builder.Configuration["GH_TOKEN"];
 
-// --- øéùåí ä-Service åä-Decorator (áàîöòåú Scrutor) ---
-// 3. øéùåí äùéøåú äàîéúé (äáñéñé) ùîúçáø ì-GitHub.
+    if (!string.IsNullOrEmpty(envUsername)) options.Username = envUsername;
+    if (!string.IsNullOrEmpty(envToken)) options.Token = envToken;
+});
+
+// --- ×¨×™×©×•× ×”-Service ×•×”-Decorator (×‘×××¦×¢×•×ª Scrutor) ---
+// 3. ×¨×™×©×•× ×”×©×™×¨×•×ª ×”×××™×ª×™ (×”×‘×¡×™×¡×™) ×©××ª×—×‘×¨ ×œ-GitHub.
 builder.Services.AddScoped<IGitHubService, GitHubService.GitHubService>();
 
-// 4. øéùåí ä-Decorator (äîòèôú) ùîèôì á-Caching.
-// ëàùø ÷åã éá÷ù IGitHubService, äåà é÷áì àú CachedGitHubService ùîòèó àú GitHubService.
+// 4. ×¨×™×©×•× ×”-Decorator (×”××¢×˜×¤×ª) ×©××˜×¤×œ ×‘-Caching.
 builder.Services.Decorate<IGitHubService, CachedGitHubService>();
 
-
-// --- ùéøåúé API ñèğãøèééí ---
+// --- ×©×™×¨×•×ª×™ API ×¡×˜× ×“×¨×˜×™×™× ---
 builder.Services.AddControllers();
-// ìéîåã: äåñôú Swagger/OpenAPI ëãé ìä÷ì òì äáãé÷åú
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-// --- áğééú ä-App ---
+// --- ×‘× ×™×™×ª ×”-App ---
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -82,9 +155,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
