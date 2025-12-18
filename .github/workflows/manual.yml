@@ -2,9 +2,9 @@ name: .NET build and run
 
 on:
   push:
-    branches: [ "main" ] # ודאי שזה שם הענף שלך
+    branches: [ "master" ] # ודאי שזה שם הענף שלך
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build:
