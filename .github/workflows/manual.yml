@@ -2,7 +2,7 @@ name: .NET build and run
 
 on:
   push:
-    branches: [ "master" ] # ודאי שזה שם הענף שלך
+    branches: [ "master" ] # מעודכן לפי הצילום מסך שלך
   pull_request:
     branches: [ "master" ]
 
@@ -19,14 +19,14 @@ jobs:
         dotnet-version: '8.0' 
 
     - name: Restore
-      run: dotnet restore
+      run: dotnet restore ./PortfolioApi/PortfolioApi.csproj # הוספת נתיב מפורש
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ./PortfolioApi/PortfolioApi.csproj --no-restore
 
     - name: Run Application
       env:
-        # אלו השמות שקבענו ב-Program.cs וב-Secrets
         GH_USERNAME: ${{ secrets.GH_USERNAME }}
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: dotnet run --no-build
+      # כאן אנחנו אומרים לו בדיוק איזה פרויקט להריץ
+      run: dotnet run --project ./PortfolioApi/PortfolioApi.csproj --no-build
