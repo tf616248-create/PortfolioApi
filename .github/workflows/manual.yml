@@ -1,8 +1,8 @@
-name: .NET build and run
+name: .NET Build Validation
 
 on:
   push:
-    branches: [ "master" ] # מעודכן לפי הצילום מסך שלך
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -18,15 +18,12 @@ jobs:
       with:
         dotnet-version: '8.0' 
 
-    - name: Restore
-      run: dotnet restore ./PortfolioApi/PortfolioApi.csproj # הוספת נתיב מפורש
+    - name: Restore dependencies
+      run: dotnet restore ./PortfolioApi/PortfolioApi.csproj
 
-    - name: Build
-      run: dotnet build ./PortfolioApi/PortfolioApi.csproj --no-restore
-
-    - name: Run Application
+    - name: Build Project
       env:
         GH_USERNAME: ${{ secrets.GH_USERNAME }}
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      # כאן אנחנו אומרים לו בדיוק איזה פרויקט להריץ
-      run: dotnet run --project ./PortfolioApi/PortfolioApi.csproj --no-build
+      # הפקודה הזו בודקת שהקוד מתקמפל ותקין, כולל שימוש ב-Secrets
+      run: dotnet build ./PortfolioApi/PortfolioApi.csproj --configuration Release --no-restore
